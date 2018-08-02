@@ -6,10 +6,10 @@ class Killboard:
 
 	#TODO: Seperate into functions, add verification earlier in main.
 
-	def __init__():
+	def __init__(self):
 		self.org_ID = int(input("\nEnter the ID of the organization, must be corp or alliance \n"))
 		self.org_type = int(input("\nEnter 1 if the organization is a corp, 2 if alliance \n"))
-		board = dict()
+		self.board = {}
 
 	def pull_kills():
 		#TODO: Make this only a sorting function
