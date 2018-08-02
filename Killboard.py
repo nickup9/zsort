@@ -7,41 +7,36 @@ class Killboard:
 	#TODO: Seperate into functions, add verification earlier in main.
 
 	def __init__(self):
-		self.org_ID = int(input("\nEnter the ID of the organization, must be corp or alliance \n"))
-		self.org_type = int(input("\nEnter 1 if the organization is a corp, 2 if alliance \n"))
+		while 1:
+			self.org_ID = int(input("\nEnter the ID of the organization, must be corp or alliance \n"))
+			while 1:
+				self.org_type = int(input("\nEnter 1 if the organization is a corp, 2 if alliance \n"))
+				if org_type == 1 or org_type == 2
+					break
+				else
+					print("\nInvalid Identifier, try again\n")
+			self.url = get_url()
+				if verify_URL(url) == 0
+					break
+				else
+					print('Invalid URL, from the top now...')
 		self.board = {}
 
 	def pull_kills():
-		#TODO: Make this only a sorting function
-		#ID is a int, Type is 1 for corps, 2 for alliances
-		baseURL = 'https://zkillboard.com/api/zkbOnly/kills/'
-		#for data pulling
-		final_url = 'http://zkillboard.com/kill/'
-		#for creating links to standard man-readable KMs
-
 		page = 1
 		#As per Zkill API docs, default page is 1.
-
-		if org_type == 1:
-			baseURL = baseURL + 'corporationID/' + str(org_ID) + '/'
-		elif org_type == 2:
-			baseURL = baseURL + 'allianceID/' + str(org_ID) + '/'
-		else:
-			print('Error: The wrong entity identifier was inputted/there was a error reading identifier')
-			exit()
-		#I feel like there are better ways to do this, but I can't be bothered to improve this ATM
-
-		print('Base URL: ' + baseURL)
+		print('Base URL: ' + url)
 		print('Checking if killboard exists...')
-
+		temp_url = url
 		while 1:	
-			url = baseURL + 'page/' + str(page) + '/'
-			verify_URL(url)
-			buff = requests.get(url)
+			temp_url = temp_url + 'page/' + str(page) + '/'
+			if verify_URL(temp_url) != 0
+				break
+			buff = requests.get(temp_url)
 			killbuffer = buff.json()
 			for x in killbuffer:
 					board[str(x['killmail_id'])] = x['zkb']['totalValue']
-			board = page + 1
+			page = page + 1
 
 	def sort(modifer):
 		#modifer of 1 will make order decending.
@@ -51,7 +46,20 @@ class Killboard:
 		#From a academic standpoint, this is cheating, but it works. This actually turns kills into a list of tuples.
 		#TODO: Make actual fucking quicksort
 
+	def get_url():
+		#TODO: Make this only a sorting function
+		#ID is a int, Type is 1 for corps, 2 for alliances
+		baseURL = 'https://zkillboard.com/api/zkbOnly/kills/'
+		if org_type == 1:
+			baseURL = baseURL + 'corporationID/' + str(org_ID) + '/'
+		elif org_type == 2:
+			baseURL = baseURL + 'allianceID/' + str(org_ID) + '/'
+		else:
+			print('Error: The wrong entity identifier was inputted/there was a error reading identifier')
+		#I feel like there are better ways to do this, but I can't be bothered to improve this ATM
+
 	def to_file(out):
+		final_url = 'http://zkillboard.com/kill/'
 		f = open(out, "w")
 		for x in board:
 			f.write('KILL ID: ' + str(x[0]) + ' | ' + 'ISK: ' + str(x[1]) + ' | URL: ' + final_url + str(x[0]) + '/ \n')
