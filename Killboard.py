@@ -6,12 +6,12 @@ class Killboard:
 
 	#TODO: Seperate into functions, add verification earlier in main.
 
-	def __init__(self, ID, Type):
-		self.org_ID = ID
-		self.org_type = Type
+	def __init__():
+		self.org_ID = int(input("\nEnter the ID of the organization, must be corp or alliance \n"))
+		self.org_type = int(input("\nEnter 1 if the organization is a corp, 2 if alliance \n"))
 		board = dict()
 
-	def pull_kills(ID, Type):
+	def pull_kills():
 		#TODO: Make this only a sorting function
 		#ID is a int, Type is 1 for corps, 2 for alliances
 		baseURL = 'https://zkillboard.com/api/zkbOnly/kills/'
@@ -22,10 +22,10 @@ class Killboard:
 		page = 1
 		#As per Zkill API docs, default page is 1.
 
-		if Type == 1:
-			baseURL = baseURL + 'corporationID/' + str(ID) + '/'
-		elif Type == 2:
-			baseURL = baseURL + 'allianceID/' + str(ID) + '/'
+		if org_type == 1:
+			baseURL = baseURL + 'corporationID/' + str(org_ID) + '/'
+		elif org_type == 2:
+			baseURL = baseURL + 'allianceID/' + str(org_ID) + '/'
 		else:
 			print('Error: The wrong entity identifier was inputted/there was a error reading identifier')
 			exit()
@@ -40,11 +40,8 @@ class Killboard:
 			buff = requests.get(url)
 			killbuffer = buff.json()
 			for x in killbuffer:
-					kills[str(x['killmail_id'])] = x['zkb']['totalValue']
-			page = page + 1
-
-		return kills
-		#End of function here
+					board[str(x['killmail_id'])] = x['zkb']['totalValue']
+			board = page + 1
 
 	def sort(modifer):
 		#modifer of 1 will make order decending.
@@ -54,12 +51,12 @@ class Killboard:
 		#From a academic standpoint, this is cheating, but it works. This actually turns kills into a list of tuples.
 		#TODO: Make actual fucking quicksort
 
-	def to_file(kills):
-		f = open(output_name, "w")
-		for x in kills:
+	def to_file(out):
+		f = open(out, "w")
+		for x in board:
 			f.write('KILL ID: ' + str(x[0]) + ' | ' + 'ISK: ' + str(x[1]) + ' | URL: ' + final_url + str(x[0]) + '/ \n')
 		f.close()
-		print('Output file created as ' + output_name)
+		print('Output file created as ' + out)
 
 	def verify_URL(tgt):
 		#Status codes: 0 is ok, 1 is end of board, 2 is HTTP error
