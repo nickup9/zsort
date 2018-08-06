@@ -1,6 +1,7 @@
 class Killboard:
 	import json
 	import requests
+	from requests import HTTPError
 	import operator
 	import time
 
@@ -10,7 +11,7 @@ class Killboard:
 		# Status codes: 0 is ok, 1 is end of board, 2 is HTTP error
 		temp = self.requests.get(tgt)
 		try:
-			temp.self.raise_for_status()
+			temp.raise_for_status()
 			# 404/error check
 		except HTTPError:
 			return 2
@@ -27,7 +28,7 @@ class Killboard:
 		temp_url = self.url
 		while 1:	
 			temp_url = temp_url + 'page/' + str(page) + '/'
-			if self.verify_URL(temp_url) != 0:
+			if self.verify_url(temp_url) != 0:
 				break
 			print('Now pulling from page' + page)
 			buff = requests.get(temp_url)
