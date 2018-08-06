@@ -30,7 +30,7 @@ class Killboard:
 			temp_url = temp_url + 'page/' + str(page) + '/'
 			if self.verify_url(temp_url) != 0:
 				break
-			print('Now pulling from page' + page)
+			print('Now pulling from page' + str(page))
 			buff = requests.get(temp_url)
 			killbuffer = buff.json()
 			for x in killbuffer:
