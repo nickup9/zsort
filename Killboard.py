@@ -5,6 +5,7 @@ class Killboard:
 	import time
 
 	# TODO: Seperate into functions, add verification earlier in main.
+
 	def verify_url(self, tgt):
 		# Status codes: 0 is ok, 1 is end of board, 2 is HTTP error
 		temp = self.requests.get(tgt)
@@ -16,8 +17,7 @@ class Killboard:
 		if temp.text == '[]':
 			# Checks to see if JSON is empty, in which case org does not exist
 			return 1
-		else:
-			return 0
+		return 0
 
 	def pull_kills(self):
 		page = 1
@@ -76,7 +76,7 @@ class Killboard:
 					print("\nInvalid Identifier, try again\n")
 			self.make_url()
 			print(self.url)
-			if self.verify_URL(self.url) == 0:
+			if self.verify_url(self.url) == 0:
 				break
 			else:
 				print('Invalid URL, from the top now...')
