@@ -44,7 +44,7 @@ class Killboard:
 		#From a academic standpoint, this is cheating, but it works. This actually turns kills into a list of tuples.
 		#TODO: Make actual fucking quicksort
 
-	def get_url(self):
+	def make_url(self):
 		#TODO: Make this only a sorting function
 		#ID is a int, Type is 1 for corps, 2 for alliances
 		baseURL = 'https://zkillboard.com/api/zkbOnly/kills/'
@@ -74,8 +74,9 @@ class Killboard:
 					break
 				else:
 					print("\nInvalid Identifier, try again\n")
-			url = self.get_url()
-			if self.verify_URL(url) == 0:
+			self.url = self.make_url()
+			print(self.url)
+			if self.verify_URL(self.url) == 0:
 				break
 			else:
 				print('Invalid URL, from the top now...')
