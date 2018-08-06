@@ -4,24 +4,24 @@ class Killboard:
 	import operator
 	import time
 
-	#TODO: Seperate into functions, add verification earlier in main.
-	def verify_URL(self, tgt):
-		#Status codes: 0 is ok, 1 is end of board, 2 is HTTP error
+	# TODO: Seperate into functions, add verification earlier in main.
+	def verify_url(self, tgt):
+		# Status codes: 0 is ok, 1 is end of board, 2 is HTTP error
 		temp = self.requests.get(tgt)
 		try:
 			temp.self.raise_for_status()
-			#404/error check
+			# 404/error check
 		except HTTPError:
 			return 2
 		if temp.text == '[]':
-			#Checks to see if JSON is empty, in which case org does not exist
+			# Checks to see if JSON is empty, in which case org does not exist
 			return 1
 		else:
 			return 0
 
 	def pull_kills(self):
 		page = 1
-		#As per Zkill API docs, default page is 1.
+		# As per Zkill API docs, default page is 1.
 		print('Base URL: ' + self.url)
 		print('Checking if killboard exists...')
 		temp_url = self.url
@@ -37,21 +37,21 @@ class Killboard:
 			page = page + 1
 
 	def sort(self, modifer):
-		#modifer of 1 will make order decending.
+		# modifer of 1 will make order decending.
 		self.board = sorted(self.board.items(), key=operator.itemgetter(1))
 		if modifer == 1:
 			self.board.reverse()
-		#From a academic standpoint, this is cheating, but it works. This actually turns kills into a list of tuples.
-		#TODO: Make actual fucking quicksort
+		# From a academic standpoint, this is cheating, but it works. This actually turns kills into a list of tuples.
+		# TODO: Make actual fucking quicksort
 
 	def make_url(self):
-		#TODO: Make this only a sorting function
-		#ID is a int, Type is 1 for corps, 2 for alliances
+		# TODO: Make this only a sorting function
+		# ID is a int, Type is 1 for corps, 2 for alliances
 		baseURL = 'https://zkillboard.com/api/zkbOnly/kills/'
 		if self.org_type == 1:
-			baseURL = baseURL + 'corporationID/' + str(self.org_ID) + '/'
+			self.url = baseURL + 'corporationID/' + str(self.org_ID) + '/'
 		elif self.org_type == 2:
-			self.baseURL = baseURL + 'allianceID/' + str(self.org_ID) + '/'
+			self.url = baseURL + 'allianceID/' + str(self.org_ID) + '/'
 
 	def to_file(self):
 		final_url = 'http://zkillboard.com/kill/'
@@ -74,11 +74,10 @@ class Killboard:
 					break
 				else:
 					print("\nInvalid Identifier, try again\n")
-			self.url = self.make_url()
+			self.make_url()
 			print(self.url)
 			if self.verify_URL(self.url) == 0:
 				break
 			else:
 				print('Invalid URL, from the top now...')
 		self.board = {}
-
